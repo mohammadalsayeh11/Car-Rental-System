@@ -1,3 +1,4 @@
-*.js linguist-vendored
-*.css linguist-vendored
+*.js linguist-detectable=false
+*.css linguist-detectable=false
+*.html linguist-detectable=false
 wwwroot/** linguist-vendored
