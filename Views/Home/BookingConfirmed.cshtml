@@ -1,0 +1,36 @@
+@model CentalMvc.Models.Booking
+@{
+    ViewData["Title"] = "Booking Confirmed";
+}
+
+<div class="container py-5 my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+            <div class="p-5 rounded" style="background:#131A2A;border:1px solid rgba(34,211,238,.15);box-shadow:0 0 30px rgba(34,211,238,.2);">
+                <i class="fas fa-circle-check text-primary" style="font-size:70px;"></i>
+                <h2 class="text-white mt-4 mb-3">Booking Confirmed!</h2>
+                <p class="mb-4">Thank you, <span class="text-primary">@Model.CustomerName</span>. Your reservation has been received.</p>
+
+                <div class="text-start mx-auto" style="max-width:400px;">
+                    <div class="d-flex justify-content-between border-bottom py-2" style="border-color:rgba(255,255,255,.08)!important;">
+                        <span>Car</span><span class="text-white">@Model.Car?.Name</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2" style="border-color:rgba(255,255,255,.08)!important;">
+                        <span>Pick-up</span><span class="text-white">@Model.PickupDate.ToString("dd MMM yyyy")</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2" style="border-color:rgba(255,255,255,.08)!important;">
+                        <span>Drop-off</span><span class="text-white">@Model.DropoffDate.ToString("dd MMM yyyy")</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-2" style="border-color:rgba(255,255,255,.08)!important;">
+                        <span>Status</span><span class="text-primary">@Model.Status</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-2">
+                        <span class="fw-bold text-white">Total</span><span class="fw-bold text-primary">$@Model.TotalPrice</span>
+                    </div>
+                </div>
+
+                <a asp-controller="Home" asp-action="Vehicle" class="btn btn-primary rounded-pill py-2 px-4 mt-4">Browse More Cars</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+@model List<CentalMvc.Models.Car>
+@{
+    ViewData["Title"] = "Vehicles";
+}
+
+<div class="bg-breadcrumb">
+    <div class="container text-center py-4">
+        <h3 class="text-white mb-2">Our Vehicles</h3>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active text-white">Vehicles</li>
+        </ol>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        @if (Model.Count == 0)
+        {
+            <p class="text-center">No cars available right now.</p>
+        }
+        else
+        {
+            @foreach (var car in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="categories-item h-100">
+                        <div class="categories-item-inner h-100 d-flex flex-column">
+                            <div class="categories-img">
+                                <img src="@car.ImageUrl" class="img-fluid w-100"
+                                     style="height:220px;object-fit:cover;" alt="@car.Name"
+                                     onerror="this.src='/img/car-default.jpg'">
+                            </div>
+                            <div class="categories-content p-4 d-flex flex-column flex-grow-1">
+                                <h4>@car.Name</h4>
+                                <p class="mb-2">@car.Brand • @car.CarType • @car.ModelYear</p>
+                                <div class="d-flex justify-content-center gap-3 mb-3" style="font-size:14px;">
+                                    <span><i class="fas fa-users text-primary me-1"></i>@car.Seats</span>
+                                    <span><i class="fas fa-gas-pump text-primary me-1"></i>@car.FuelType</span>
+                                    <span><i class="fas fa-cog text-primary me-1"></i>@car.Transmission</span>
+                                </div>
+                                <h5 class="text-primary mb-3">$@car.PricePerDay <small class="text-body">/ day</small></h5>
+                                <div class="d-flex gap-2 mt-auto">
+                                    <a asp-action="CarDetails" asp-route-id="@car.Id"
+                                       class="btn btn-outline-primary rounded-pill py-2 px-3 flex-fill">Details</a>
+                                    <a asp-action="Book" asp-route-id="@car.Id"
+                                       class="btn btn-primary rounded-pill py-2 px-3 flex-fill">Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

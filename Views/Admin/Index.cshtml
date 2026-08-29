@@ -1,0 +1,72 @@
+@using CentalMvc.Models
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Active"] = "dashboard";
+    Layout = "_AdminLayout";
+    var recent = ViewBag.RecentBookings as List<Booking> ?? new List<Booking>();
+}
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-car"></i></div>
+        <div class="stat-value">@ViewBag.CarCount</div>
+        <div class="stat-label">Total Cars</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-circle-check"></i></div>
+        <div class="stat-value">@ViewBag.AvailableCars</div>
+        <div class="stat-label">Available Cars</div>
+    </div>
+    <div class="stat-card violet">
+        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+        <div class="stat-value">@ViewBag.BookingCount</div>
+        <div class="stat-label">Total Bookings</div>
+    </div>
+    <div class="stat-card violet">
+        <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stat-value">@ViewBag.PendingBookings</div>
+        <div class="stat-label">Pending Bookings</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-value">@ViewBag.UserCount</div>
+        <div class="stat-label">Registered Customers</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+        <div class="stat-value">$@ViewBag.Revenue</div>
+        <div class="stat-label">Revenue (confirmed)</div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-head">
+        <h5><i class="fas fa-clock-rotate-left me-2"></i>Recent Bookings</h5>
+        <a asp-controller="Bookings" asp-action="Index" class="btn btn-ghost btn-sm">View all</a>
+    </div>
+
+    @if (recent.Count == 0)
+    {
+        <p class="text-muted mb-0">No bookings yet.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr><th>Customer</th><th>Car</th><th>Pickup</th><th>Total</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var b in recent)
+                {
+                    <tr>
+                        <td class="car-name">@b.CustomerName</td>
+                        <td>@(b.Car?.Name ?? "-")</td>
+                        <td>@b.PickupDate.ToString("dd MMM yyyy")</td>
+                        <td>$@b.TotalPrice</td>
+                        <td><span class="badge-pill badge-@b.Status.ToString().ToLower()">@b.Status</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

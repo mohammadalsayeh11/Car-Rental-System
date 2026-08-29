@@ -1,0 +1,45 @@
+@model List<CentalMvc.Models.TeamMember>
+@{
+    ViewData["Title"] = "Team";
+}
+
+<!-- Header Start -->
+<div class="container-fluid bg-breadcrumb mb-5">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Our Team</h4>
+        <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+            <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active text-primary">Team</li>
+        </ol>
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Team Start -->
+<div class="container-fluid team py-5">
+    <div class="container">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+            <h1 class="display-5 text-capitalize mb-3">Customer<span class="text-primary"> Support</span> Center</h1>
+            <p class="mb-0">Meet the people who make your rental experience smooth and stress-free.</p>
+        </div>
+        <div class="row g-4">
+            @if (Model.Count == 0)
+            {
+                <p class="text-center">Team information coming soon.</p>
+            }
+            else
+            {
+                var delays = new[] { "0.1s", "0.3s", "0.5s", "0.7s" };
+                var i = 0;
+                foreach (var member in Model)
+                {
+                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="@delays[i % delays.Length]">
+                        @await Html.PartialAsync("_TeamMemberCard", member)
+                    </div>
+                    i++;
+                }
+            }
+        </div>
+    </div>
+</div>
+<!-- Team End -->

@@ -1,0 +1,73 @@
+@using CentalMvc.Models
+@model List<CentalMvc.Models.Booking>
+@{
+    ViewData["Title"] = "Bookings";
+    ViewData["Active"] = "bookings";
+    Layout = "_AdminLayout";
+}
+
+<div class="panel">
+    <div class="panel-head">
+        <h5><i class="fas fa-calendar-check me-2"></i>All Bookings (@Model.Count)</h5>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <p class="text-muted mb-0">No bookings yet.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Customer</th><th>Contact</th><th>Car</th>
+                    <th>Dates</th><th>Total</th><th>Status</th><th style="text-align:right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td class="car-name">@b.CustomerName</td>
+                        <td>
+                            <div>@b.Email</div>
+                            <div style="font-size:13px;color:#6b7688;">@b.Phone</div>
+                        </td>
+                        <td>@(b.Car?.Name ?? "-")</td>
+                        <td style="white-space:nowrap;">
+                            @b.PickupDate.ToString("dd MMM") → @b.DropoffDate.ToString("dd MMM yyyy")
+                        </td>
+                        <td>$@b.TotalPrice</td>
+                        <td><span class="badge-pill badge-@b.Status.ToString().ToLower()">@b.Status</span></td>
+                        <td style="text-align:right;white-space:nowrap;">
+                            <form asp-controller="Bookings" asp-action="UpdateStatus" method="post" style="display:inline-flex;gap:6px;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@b.Id" />
+                                <select name="status" class="form-select" style="width:auto;padding:6px 10px;font-size:13px;">
+                                    @foreach (BookingStatus s in Enum.GetValues(typeof(BookingStatus)))
+                                    {
+                                        if (s == b.Status)
+                                        {
+                                            <option value="@s" selected>@s</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@s">@s</option>
+                                        }
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-ghost btn-sm"><i class="fas fa-check"></i></button>
+                            </form>
+                            <form asp-controller="Bookings" asp-action="Delete" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Delete this booking?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@b.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

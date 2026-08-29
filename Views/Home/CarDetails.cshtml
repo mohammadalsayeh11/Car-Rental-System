@@ -1,0 +1,158 @@
+@model CentalMvc.Models.Car
+@using CentalMvc.Models
+@{
+    ViewData["Title"] = Model.Name;
+    var reviews = ViewBag.Reviews as List<Review> ?? new List<Review>();
+    var avg = (double)(ViewBag.AvgRating ?? 0);
+    var count = (int)(ViewBag.ReviewCount ?? 0);
+}
+
+<div class="bg-breadcrumb">
+    <div class="container text-center py-4">
+        <h3 class="text-white mb-2">@Model.Name</h3>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Vehicle">Vehicles</a></li>
+            <li class="breadcrumb-item active text-white">@Model.Name</li>
+        </ol>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (TempData["Msg"] != null)
+    {
+        <div class="alert alert-success">@TempData["Msg"]</div>
+    }
+    @if (TempData["Err"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Err"]</div>
+    }
+
+    <div class="row g-5">
+        <div class="col-lg-6">
+            <img src="@Model.ImageUrl" class="img-fluid rounded w-100"
+                 style="height:340px;object-fit:cover;border:1px solid rgba(34,211,238,.15);"
+                 alt="@Model.Name"
+                 onerror="this.src='/img/car-default.jpg'">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="text-white">@Model.Name</h2>
+            <div class="mb-3">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <i class="fas fa-star @(i <= Math.Round(avg) ? "text-primary" : "text-muted")"></i>
+                }
+                <span class="ms-2">@avg / 5 (@count reviews)</span>
+            </div>
+            <h3 class="text-primary mb-4">$@Model.PricePerDay <small class="text-body">/ day</small></h3>
+            <div class="row g-3 mb-4">
+                <div class="col-6"><i class="fas fa-car text-primary me-2"></i>@Model.Brand</div>
+                <div class="col-6"><i class="fas fa-tag text-primary me-2"></i>@Model.CarType</div>
+                <div class="col-6"><i class="fas fa-calendar text-primary me-2"></i>@Model.ModelYear</div>
+                <div class="col-6"><i class="fas fa-users text-primary me-2"></i>@Model.Seats Seats</div>
+                <div class="col-6"><i class="fas fa-gas-pump text-primary me-2"></i>@Model.FuelType</div>
+                <div class="col-6"><i class="fas fa-cog text-primary me-2"></i>@Model.Transmission</div>
+            </div>
+            <p>@Model.Description</p>
+            @if (Model.IsAvailable)
+            {
+                <a asp-action="Book" asp-route-id="@Model.Id" class="btn btn-primary rounded-pill py-2 px-5">Book Now</a>
+            }
+            else
+            {
+                <span class="btn btn-secondary rounded-pill py-2 px-5 disabled">Not Available</span>
+            }
+        </div>
+    </div>
+
+    <hr class="my-5" style="border-color:rgba(255,255,255,.08);">
+
+    <!-- Reviews -->
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <h4 class="text-white mb-4">Reviews (@count)</h4>
+            @if (reviews.Count == 0)
+            {
+                <p>No reviews yet. Be the first to review this car!</p>
+            }
+            else
+            {
+                @foreach (var r in reviews)
+                {
+                    <div class="p-3 mb-3 rounded" style="background:#131A2A;border:1px solid rgba(34,211,238,.12);">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="text-white mb-1"><i class="fas fa-user-circle text-primary me-2"></i>@r.UserName</h6>
+                            <small>@r.CreatedAt.ToString("dd MMM yyyy")</small>
+                        </div>
+                        <div class="mb-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="fas fa-star @(i <= r.Rating ? "text-primary" : "text-muted")" style="font-size:13px;"></i>
+                            }
+                        </div>
+                        <p class="mb-0">@r.Comment</p>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="col-lg-5">
+            <div class="p-4 rounded" style="background:#131A2A;border:1px solid rgba(34,211,238,.15);">
+                <h5 class="text-white mb-3">Write a Review</h5>
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <form asp-action="AddReview" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="carId" value="@Model.Id" />
+
+                        <label class="text-body mb-2">Your Rating</label>
+                        <div class="star-input mb-3" id="starInput">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="far fa-star" data-val="@i" style="font-size:26px;cursor:pointer;color:#22D3EE;margin-right:4px;"></i>
+                            }
+                            <input type="hidden" name="rating" id="ratingValue" value="5" />
+                        </div>
+
+                        <div class="mb-3">
+                            <textarea name="comment" class="form-control" rows="4" placeholder="Share your experience..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-pill w-100 py-2">Submit Review</button>
+                    </form>
+                }
+                else
+                {
+                    <p>Please <a asp-controller="Auth" asp-action="Login" class="text-primary">log in</a> to write a review.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var stars = document.querySelectorAll('#starInput i');
+            var input = document.getElementById('ratingValue');
+            function paint(val) {
+                stars.forEach(function (s) {
+                    var v = parseInt(s.getAttribute('data-val'));
+                    s.className = v <= val ? 'fas fa-star' : 'far fa-star';
+                });
+            }
+            paint(5);
+            stars.forEach(function (s) {
+                s.addEventListener('click', function () {
+                    var val = parseInt(s.getAttribute('data-val'));
+                    input.value = val;
+                    paint(val);
+                });
+                s.addEventListener('mouseenter', function () {
+                    paint(parseInt(s.getAttribute('data-val')));
+                });
+            });
+            var wrap = document.getElementById('starInput');
+            if (wrap) wrap.addEventListener('mouseleave', function () { paint(parseInt(input.value)); });
+        })();
+    </script>
+}

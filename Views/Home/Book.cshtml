@@ -1,0 +1,66 @@
+@model CentalMvc.Models.Booking
+@{
+    ViewData["Title"] = "Book a Car";
+}
+
+<div class="bg-breadcrumb">
+    <div class="container text-center py-4">
+        <h3 class="text-white">Book Your Car</h3>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5 justify-content-center">
+        <div class="col-lg-5">
+            <div class="p-4 rounded" style="background:#131A2A;border:1px solid rgba(34,211,238,.15);">
+                <img src="@Model.Car?.ImageUrl" class="img-fluid rounded mb-3 w-100"
+                     style="height:240px;object-fit:cover;" alt="@Model.Car?.Name"
+                     onerror="this.src='/img/car-default.jpg'">
+                <h4 class="text-white mb-2 mt-2">@Model.Car?.Name</h4>
+                <p class="mb-1"><i class="fas fa-gas-pump text-primary me-2"></i>@Model.Car?.FuelType</p>
+                <p class="mb-1"><i class="fas fa-cog text-primary me-2"></i>@Model.Car?.Transmission</p>
+                <p class="mb-1"><i class="fas fa-users text-primary me-2"></i>@Model.Car?.Seats Seats</p>
+                <h5 class="text-primary mt-3">$@Model.Car?.PricePerDay <small class="text-body">/ day</small></h5>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="p-4 rounded" style="background:#131A2A;border:1px solid rgba(34,211,238,.15);">
+                <h4 class="text-white mb-4">Reservation Details</h4>
+                <form asp-action="Book" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="CarId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                    <div class="mb-3">
+                        <input asp-for="CustomerName" class="form-control" placeholder="Full Name" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="Phone" class="form-control" placeholder="Phone" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="PickupLocation" class="form-control" placeholder="Pick-up Location" />
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="text-body mb-1">Pick-up</label>
+                            <input asp-for="PickupDate" type="date" class="form-control" />
+                        </div>
+                        <div class="col-6">
+                            <label class="text-body mb-1">Drop-off</label>
+                            <input asp-for="DropoffDate" type="date" class="form-control" />
+                            <span asp-validation-for="DropoffDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+@model CentalMvc.Models.TeamMember
+
+<div class="team-item p-4 pt-0">
+    <div class="team-img">
+        <img src="@Model.ImageUrl" class="img-fluid rounded w-100"
+             style="height:260px;object-fit:cover;" alt="@Model.Name"
+             onerror="this.src='/img/team-1.jpg'">
+    </div>
+    <div class="team-content pt-4">
+        <h4>@Model.Name</h4>
+        <p>@Model.Role</p>
+        <div class="team-icon d-flex justify-content-center">
+            @if (!string.IsNullOrWhiteSpace(Model.FacebookUrl))
+            {
+                <a class="btn btn-square btn-light rounded-circle mx-1" href="@Model.FacebookUrl"><i class="fab fa-facebook-f"></i></a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.TwitterUrl))
+            {
+                <a class="btn btn-square btn-light rounded-circle mx-1" href="@Model.TwitterUrl"><i class="fab fa-twitter"></i></a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.InstagramUrl))
+            {
+                <a class="btn btn-square btn-light rounded-circle mx-1" href="@Model.InstagramUrl"><i class="fab fa-instagram"></i></a>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.LinkedInUrl))
+            {
+                <a class="btn btn-square btn-light rounded-circle mx-1" href="@Model.LinkedInUrl"><i class="fab fa-linkedin-in"></i></a>
+            }
+        </div>
+    </div>
+</div>

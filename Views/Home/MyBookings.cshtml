@@ -1,0 +1,68 @@
+@model List<CentalMvc.Models.Booking>
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="bg-breadcrumb">
+    <div class="container text-center py-4">
+        <h3 class="text-white mb-2">My Bookings</h3>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active text-white">My Bookings</li>
+        </ol>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (TempData["Msg"] != null)
+    {
+        <div class="alert alert-success">@TempData["Msg"]</div>
+    }
+
+    @if (Model.Count == 0)
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-calendar-xmark text-primary" style="font-size:60px;"></i>
+            <h4 class="text-white mt-4">No bookings yet</h4>
+            <p>You haven't booked any cars. Browse our fleet and reserve one!</p>
+            <a asp-action="Vehicle" class="btn btn-primary rounded-pill py-2 px-4 mt-2">Browse Cars</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var b in Model)
+            {
+                <div class="col-lg-6">
+                    <div class="p-4 rounded h-100" style="background:#131A2A;border:1px solid rgba(34,211,238,.15);">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h4 class="text-white mb-0">@(b.Car?.Name ?? "Car")</h4>
+                            @{
+                                var cls = b.Status switch {
+                                    CentalMvc.Models.BookingStatus.Confirmed => "text-primary",
+                                    CentalMvc.Models.BookingStatus.Completed => "text-success",
+                                    CentalMvc.Models.BookingStatus.Cancelled => "text-danger",
+                                    _ => "text-warning"
+                                };
+                            }
+                            <span class="@cls fw-bold">@b.Status</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-1"><span>Pick-up</span><span class="text-white">@b.PickupDate.ToString("dd MMM yyyy")</span></div>
+                        <div class="d-flex justify-content-between py-1"><span>Drop-off</span><span class="text-white">@b.DropoffDate.ToString("dd MMM yyyy")</span></div>
+                        <div class="d-flex justify-content-between py-1"><span>Location</span><span class="text-white">@(string.IsNullOrEmpty(b.PickupLocation) ? "-" : b.PickupLocation)</span></div>
+                        <div class="d-flex justify-content-between py-1"><span>Booked on</span><span class="text-white">@b.CreatedAt.ToString("dd MMM yyyy")</span></div>
+                        <hr style="border-color:rgba(255,255,255,.08);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-white">Total</span>
+                            <span class="fw-bold text-primary fs-5">$@b.TotalPrice</span>
+                        </div>
+                        @if (b.Status == CentalMvc.Models.BookingStatus.Completed && b.Car != null)
+                        {
+                            <a asp-action="CarDetails" asp-route-id="@b.CarId" class="btn btn-outline-primary rounded-pill w-100 mt-3">Leave a Review</a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,4 @@
+CENTAL BUILD: v5-CLEAN-INSERT
+- Booking insert now uses a fresh entity (Id is always auto-generated).
+- Database is force-dropped and rebuilt on startup.
+Both fixes together make the IDENTITY_INSERT error impossible.

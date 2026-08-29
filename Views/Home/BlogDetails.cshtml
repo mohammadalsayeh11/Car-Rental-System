@@ -1,0 +1,46 @@
+@model CentalMvc.Models.BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="bg-breadcrumb">
+    <div class="container text-center py-4">
+        <h3 class="text-white mb-2">@Model.Title</h3>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Blog">Blog</a></li>
+            <li class="breadcrumb-item active text-white">Post</li>
+        </ol>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="blog-item">
+                <div class="blog-img">
+                    <img src="@Model.ImageUrl" class="img-fluid rounded w-100"
+                         style="height:380px;object-fit:cover;" alt="@Model.Title"
+                         onerror="this.src='/img/blog-1.jpg'">
+                </div>
+                <div class="pt-4">
+                    <div class="d-flex flex-wrap gap-3 mb-3">
+                        <span class="small"><i class="fa fa-calendar text-primary me-2"></i>@Model.PublishedDate.ToString("dd MMM yyyy")</span>
+                        <span class="small"><i class="fa fa-user text-primary me-2"></i>@Model.Author</span>
+                        <span class="small"><i class="fa fa-comment-alt text-primary me-2"></i>@Model.CommentsCount Comments</span>
+                    </div>
+                    <h2 class="text-white mb-4">@Model.Title</h2>
+                    @if (!string.IsNullOrWhiteSpace(Model.Summary))
+                    {
+                        <p class="lead">@Model.Summary</p>
+                    }
+                    <p style="white-space:pre-line;">@Model.Content</p>
+
+                    <a asp-action="Blog" class="btn btn-outline-primary rounded-pill py-2 px-4 mt-3">
+                        <i class="fa fa-arrow-left me-2"></i>Back to Blog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

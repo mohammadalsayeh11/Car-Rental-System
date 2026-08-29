@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Access Denied - Cental</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/admin.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+    <div class="login-page">
+        <div class="login-card" style="text-align:center;">
+            <i class="fas fa-ban" style="font-size:60px;color:#ff6b81;"></i>
+            <h3 style="color:#fff;margin-top:20px;">Access Denied</h3>
+            <p style="color:var(--txt-soft);">You don't have permission to view this page.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-neon" style="margin-top:10px;">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
