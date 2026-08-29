@@ -2,3 +2,4 @@ wwwroot/** linguist-vendored
 *.js linguist-vendored
 *.css linguist-vendored
 *.html linguist-vendored
+*.cshtml linguist-language=C#
