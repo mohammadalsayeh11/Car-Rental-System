@@ -1,3 +1,4 @@
-*.cshtml linguist-language=C#
-* linguist-vendored
-*.cs linguist-vendored=false
+wwwroot/** linguist-vendored
+*.js linguist-vendored
+*.css linguist-vendored
+*.html linguist-vendored
